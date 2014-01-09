@@ -20,7 +20,7 @@ public class PropertiesDirectoryBackend extends DirectoryBackend {
 	    try {
 //	        Preferences dirPref = getUserDirectoryPreferences();
 	    	Properties properties = new Properties();
-	    	properties.load(new FileInputStream(PROPERTIES_FILENAME));
+	    	properties.loadFromXML(new FileInputStream(PROPERTIES_FILENAME + ".xml"));
 
 	    	Set<Object> dirName = properties.keySet();
 	        int dirCnt = dirName.size();
@@ -51,7 +51,7 @@ public class PropertiesDirectoryBackend extends DirectoryBackend {
 	            FileDirectory fileDir = (FileDirectory)dir;
 	            properties.put(fileDir.getFriendlyName(), fileDir.getPath());
 	        }
-	        properties.store(new FileOutputStream(PROPERTIES_FILENAME), "Media server directories");
+	        properties.storeToXML(new FileOutputStream(PROPERTIES_FILENAME + ".xml"), "Media server directories");
 	    }
 	    catch (Exception e) {
 	        Debug.warning(e);
