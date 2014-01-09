@@ -123,7 +123,7 @@ public class DIDLLite
 			PrintWriter pr = new PrintWriter(writer);
 			output(pr);
 			pr.flush();
-			return byteOut.toString();
+			return byteOut.toString("UTF-8");
 		}
 		catch (UnsupportedEncodingException e) {
 			Debug.warning(e);

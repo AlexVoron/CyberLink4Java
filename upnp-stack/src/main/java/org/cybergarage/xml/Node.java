@@ -32,6 +32,7 @@
 package org.cybergarage.xml;
 
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
@@ -419,12 +420,19 @@ public class Node
 	public String toString(String enc, boolean hasChildNode)
 	{
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-		PrintWriter pr = new PrintWriter(byteOut);
-		output(pr, 0, hasChildNode);
-		pr.flush();
 		try {
-			if (enc != null && 0 < enc.length())
-				return byteOut.toString(enc);
+			OutputStreamWriter writer;
+			if (enc != null && 0 < enc.length()) {
+				writer = new OutputStreamWriter(byteOut, enc);
+			} else {
+				writer = new OutputStreamWriter(byteOut);
+			}
+			
+			PrintWriter pr = new PrintWriter(writer);
+			output(pr, 0, hasChildNode);
+			pr.flush();
+				if (enc != null && 0 < enc.length())
+					return byteOut.toString(enc);
 		}
 		catch (UnsupportedEncodingException e) {
 		}

@@ -81,6 +81,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -543,7 +544,16 @@ public class HTTPPacket
 	
 	public void setContent(String data, boolean updateWithContentLength)
 	{
-		setContent(data.getBytes(), updateWithContentLength);
+		String charSet = getCharSet();
+		if (charSet != null && !charSet.isEmpty()) {
+			try {
+				setContent(data.getBytes(charSet), updateWithContentLength);
+			} catch (UnsupportedEncodingException e) {
+				Debug.warning(e);
+			}
+		} else {
+			setContent(data.getBytes(), updateWithContentLength);
+		}
 	}
 
 	public void setContent(String data)
