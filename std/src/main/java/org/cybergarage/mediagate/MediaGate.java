@@ -26,6 +26,8 @@ import org.cybergarage.upnp.std.av.server.object.format.*;
 
 public class MediaGate
 {
+	private DirectoryBackend directoryBackend;
+	
     ////////////////////////////////////////////////
     // Constants
     ////////////////////////////////////////////////
@@ -52,10 +54,11 @@ public class MediaGate
     public MediaGate(int option, boolean need_gui)
     {
         try {
+        	directoryBackend = DirectoryBackend.getBackend();
             mediaServ = new MediaServer(MediaServer.DESCRIPTION, ContentDirectory.SCPD, ConnectionManager.SCPD);
             setOption(option);
 
-            switch (getModeOption()){
+            switch (getModeOption()) {
             case FILESYS_MODE:
                 {
                     mediaServ.addPlugIn(new ID3Format());
@@ -63,7 +66,9 @@ public class MediaGate
                     mediaServ.addPlugIn(new JPEGFormat());
                     mediaServ.addPlugIn(new PNGFormat());
                     mediaServ.addPlugIn(new MPEGFormat());
-                    loadUserDirectories();
+                    mediaServ.addPlugIn(new AVIFormat());
+                    mediaServ.addPlugIn(new MKVFormat());
+                    directoryBackend.loadUserDirectories(getMediaServer());
                 }
                 break;
             case MYTHTV_MODE:
@@ -127,81 +132,6 @@ public class MediaGate
     }
 
     ////////////////////////////////////////////////
-    // Preferences (FileSystem)
-    ////////////////////////////////////////////////
-
-    private final static String DIRECTORY_PREFS_NAME = "directory";
-
-    private Preferences prefs = null;
-
-    private Preferences getUserPreferences()
-    {
-        if (prefs == null)
-            prefs =	Preferences.userNodeForPackage(this.getClass());
-        return prefs;
-    }
-
-    private Preferences getUserDirectoryPreferences()
-    {
-        return getUserPreferences().node(DIRECTORY_PREFS_NAME);
-    }
-
-    private void clearUserDirectoryPreferences()
-    {
-        try {
-            Preferences dirPref = getUserDirectoryPreferences();
-            String dirName[] = dirPref.keys();
-            int dirCnt = dirName.length;
-            for (int n=0; n<dirCnt; n++)
-                dirPref.remove(dirName[n]);
-        }
-        catch (Exception e) {
-            Debug.warning(e);
-        }
-    }
-
-    private void loadUserDirectories()
-    {
-        try {
-            Preferences dirPref = getUserDirectoryPreferences();
-            String dirName[] = dirPref.keys();
-            int dirCnt = dirName.length;
-            Debug.message("Loadin Directories (" + dirCnt + ") ....");
-            for (int n=0; n<dirCnt; n++) {
-                String name = dirName[n];
-                String path = dirPref.get(name, "");
-                FileDirectory fileDir = new FileDirectory(name, path);
-                getMediaServer().addContentDirectory(fileDir);
-                Debug.message("[" + n + "] = " + name + "," + path);
-            }
-        }
-        catch (Exception e) {
-            Debug.warning(e);
-        }
-    }
-
-    private void saveUserDirectories()
-    {
-        clearUserDirectoryPreferences();
-
-        ContentDirectory conDir = getContentDirectory();
-        try {
-            Preferences dirPref = getUserDirectoryPreferences();
-            int dirCnt = conDir.getNDirectories();
-            for (int n=0; n<dirCnt; n++) {
-                Directory dir = conDir.getDirectory(n);
-                if (!(dir instanceof FileDirectory))
-                    continue;
-                FileDirectory fileDir = (FileDirectory)dir;
-                dirPref.put(fileDir.getFriendlyName(), fileDir.getPath());
-            }
-        }
-        catch (Exception e) {
-            Debug.warning(e);
-        }
-    }
-
-    ////////////////////////////////////////////////
     // MediaServer
     ////////////////////////////////////////////////
 
@@ -241,7 +171,7 @@ public class MediaGate
     {
         getMediaServer().stop();
         if (getOption() == FILESYS_MODE)
-            saveUserDirectories();
+        	directoryBackend.saveUserDirectories(getMediaServer());
     }
 
     ////////////////////////////////////////////////
@@ -278,7 +208,6 @@ public class MediaGate
             if (CONSOLE_OPT_STRING.compareTo(args[n]) == 0)
                 need_gui = false;
         }
-
 
         MediaGate mediaGate = new MediaGate(mode, need_gui);
         debug(mediaGate);
