@@ -38,6 +38,20 @@
       		<depth>24</depth>
       		<url>/presentation/cgms.png</url>
 		</icon>
+      	<icon>
+      		<mimeType>image/jpeg</mimeType>
+      		<width>96</width>
+      		<height>96</height>
+      		<depth>24</depth>
+      		<url>/presentation/cgms96x96_24.jpg</url>
+		</icon>
+      	<icon>
+      		<mimeType>image/png</mimeType>
+      		<width>96</width>
+      		<height>96</height>
+      		<depth>32</depth>
+      		<url>/presentation/cgms96x96_32.png</url>
+		</icon>
 		</iconList>
 	</device>
 </root>

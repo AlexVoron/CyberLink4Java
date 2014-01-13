@@ -18,6 +18,7 @@ package org.cybergarage.upnp.std.av.server;
 
 import java.io.*;
 
+import org.apache.commons.io.FilenameUtils;
 import org.cybergarage.net.*;
 import org.cybergarage.util.*;
 import org.cybergarage.http.*;
@@ -223,13 +224,23 @@ public class MediaServer extends Device
 		if (uri.startsWith("/presentation")) {
 			String resourseUri = uri.substring(1);
 			
+			Debug.message("Serving presentation resourse uri=" + resourseUri);
+			
 			File resourseFile = new File(resourseUri);
 			
 			try {
 				HTTPResponse httpRes = new HTTPResponse();
-				httpRes.setContentType("image/png");
+				
+				String resourseExt = FilenameUtils.getExtension(resourseUri);
+				if ("png".equals(resourseExt)) {
+					httpRes.setContentType("image/png");
+				} else {
+					httpRes.setContentType("image/jpeg");
+				}
 				httpRes.setStatusCode(HTTPStatus.OK);
-				httpRes.setContentLength(resourseFile.length());
+				long length = resourseFile.length();
+				httpRes.setContentLength(length);
+				Debug.message("file length = " + length);
 				httpRes.setContentInputStream(new FileInputStream(resourseFile));
 
 				httpReq.post(httpRes);
