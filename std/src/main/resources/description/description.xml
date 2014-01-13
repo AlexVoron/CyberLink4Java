@@ -6,7 +6,7 @@
    </specVersion>
    <device>
       <deviceType>urn:schemas-upnp-org:device:MediaServer:1</deviceType>
-      <friendlyName>Cyber Garage Media Server</friendlyName>
+      <friendlyName>VAN Cyber Garage Media Server</friendlyName>
       <manufacturer>Cyber Garage</manufacturer>
       <manufacturerURL>http://www.cybergarage.org</manufacturerURL>
       <modelDescription>Provides content through UPnP ContentDirectory service</modelDescription>
@@ -30,5 +30,14 @@
             <eventSubURL>/service/ConnectionManager_event</eventSubURL>
          </service>
       </serviceList>
-   </device>
+      <iconList>
+      	<icon>
+      		<mimeType>image/png</mimeType>
+      		<width>96</width>
+      		<height>96</height>
+      		<depth>24</depth>
+      		<url>/presentation/cgms.png</url>
+		</icon>
+		</iconList>
+	</device>
 </root>

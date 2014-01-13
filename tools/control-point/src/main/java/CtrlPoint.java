@@ -113,7 +113,7 @@ public class CtrlPoint extends ControlPoint implements NotifyListener, EventList
 			String nt = packet.getNT();
 			printConsole("ssdp:byebye : uuid = " + usn + ", NT = " + nt); 
 		}
-		updateTreeComp();
+//		updateTreeComp();
 	}
 	
 	public void deviceSearchResponseReceived(SSDPPacket packet)

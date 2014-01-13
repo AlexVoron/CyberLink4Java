@@ -442,7 +442,7 @@ public class Service
 			return scpdNode;
 		}
 		catch (Exception e) {
-			Debug.warning(e);
+//			Debug.warning(e);
 		}
 		
 		return null;
@@ -523,7 +523,11 @@ public class Service
 	public ServiceStateTable getServiceStateTable()
 	{
 		ServiceStateTable stateTable = new ServiceStateTable();
-		Node stateTableNode = getSCPDNode().getNode(ServiceStateTable.ELEM_NAME);
+		Node scpdNode = getSCPDNode();
+		if (scpdNode == null) {
+			return stateTable;
+		}
+		Node stateTableNode = scpdNode.getNode(ServiceStateTable.ELEM_NAME);
 		if (stateTableNode == null)
 			return stateTable;
 		Node serviceNode = getServiceNode();

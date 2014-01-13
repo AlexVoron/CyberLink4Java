@@ -55,7 +55,8 @@ public class MediaGate
     {
         try {
         	directoryBackend = DirectoryBackend.getBackend();
-            mediaServ = new MediaServer(MediaServer.DESCRIPTION, ContentDirectory.SCPD, ConnectionManager.SCPD);
+//            mediaServ = new MediaServer(MediaServer.DESCRIPTION, ContentDirectory.SCPD, ConnectionManager.SCPD);
+            mediaServ = new MediaServer(MediaServer.DESCRIPTION_FILE_NAME);
             setOption(option);
 
             switch (getModeOption()) {

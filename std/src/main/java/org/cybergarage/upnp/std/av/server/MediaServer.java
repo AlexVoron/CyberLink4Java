@@ -76,7 +76,7 @@ public class MediaServer extends Device
 	// Constructor
 	////////////////////////////////////////////////
 	
-	private final static String DESCRIPTION_FILE_NAME = "description/description.xml";
+	public final static String DESCRIPTION_FILE_NAME = "description/description.xml";
 	
 	public MediaServer(String descriptionFileName) throws InvalidDescriptionException
 	{
@@ -217,6 +217,26 @@ public class MediaServer extends Device
 	
 		if (uri.startsWith(ContentDirectory.CONTENT_EXPORT_URI) == true) {
 			getContentDirectory().contentExportRequestRecieved(httpReq);
+			return;
+		}
+		
+		if (uri.startsWith("/presentation")) {
+			String resourseUri = uri.substring(1);
+			
+			File resourseFile = new File(resourseUri);
+			
+			try {
+				HTTPResponse httpRes = new HTTPResponse();
+				httpRes.setContentType("image/png");
+				httpRes.setStatusCode(HTTPStatus.OK);
+				httpRes.setContentLength(resourseFile.length());
+				httpRes.setContentInputStream(new FileInputStream(resourseFile));
+
+				httpReq.post(httpRes);
+			} catch (FileNotFoundException e) {
+				Debug.warning(e);
+				httpReq.returnBadRequest();
+			}
 			return;
 		}
 			 
