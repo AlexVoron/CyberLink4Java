@@ -1863,6 +1863,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 	private void deviceEventNewSubscriptionRecieved(Service service, SubscriptionRequest subReq)
 	{
 		String callback = subReq.getCallback();
+		Debug.message("callback=" + callback);
 		try {
 			new URL(callback);
 		}

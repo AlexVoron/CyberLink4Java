@@ -442,12 +442,12 @@ public class HTTPRequest extends HTTPPacket
 			httpRes.set(in, isHeaderRequest);		
 		} catch (SocketException e) {
 			httpRes.setStatusCode(HTTPStatus.INTERNAL_SERVER_ERROR);
-			Debug.warning(e);
+			Debug.warning("Error connectiong to " + host + ":" + port, e);
 		} catch (IOException e) {
 			//Socket create but without connection
 			//TODO Blacklistening the device
 			httpRes.setStatusCode(HTTPStatus.INTERNAL_SERVER_ERROR);
-			Debug.warning(e);
+			Debug.warning("Error connectiong to " + host + ":" + port, e);
 		} finally {
 			if (isKeepAlive == false) {	
 				try {
